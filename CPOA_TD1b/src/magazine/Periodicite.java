@@ -3,6 +3,8 @@ import java.sql.*;
 
 public class Periodicite extends Connexion {
 	
+	//doit contenir les fonctions : insérer, supprimer, selectionner
+	
 	public void inserePeriode(){
 		Connexion connection = new Connexion();
 		Connection laConnexion = connection.creeConnexion();
