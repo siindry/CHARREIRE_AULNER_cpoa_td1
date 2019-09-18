@@ -6,6 +6,7 @@ public class Periodicite extends Connexion {
 	
 	//doit contenir les fonctions : insérer, supprimer, selectionner
 	
+	//constructeur:
 	private String nom_periodicite;
 	
 	
@@ -24,7 +25,7 @@ public class Periodicite extends Connexion {
 
 
 
-
+//fonctions:
 	public void choixPeriode() {
 		
 		
