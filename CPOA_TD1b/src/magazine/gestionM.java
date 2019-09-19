@@ -16,7 +16,7 @@ public class gestionM {
 		case "1": Periodicite p1 = new Periodicite ("");
 								p1.choixPeriode();
 			break;
-		case "2": Revue r1 = new Revue("");
+		case "2": Revue r1 = new Revue("", "", 0, "", 0);
 							r1.choixRevue();
 			break;
 		/*case 3: choixClient();
