@@ -4,39 +4,16 @@ import java.util.Scanner;
 
 public class Periodicite extends Connexion {
 	
-	//doit contenir les fonctions : insérer, supprimer, selectionner
-	
-	private String nom_periodicite;
-
 	
 	
-	public Periodicite(String nom_periodicite) {
-		this.nom_periodicite = nom_periodicite;
-
-	}
-	
-
-	public String getNom_periodicite() {
-		return nom_periodicite;
-	}
-
-	public void setNom_periodicite(String nom_periodicite) {
-		this.nom_periodicite = nom_periodicite;
-	}
-
-
-
-
-
 	public void choixPeriode() {
 		
 		
 		System.out.println("Que souhaitez-vous faire sur la table Periodicité: \n 1.Ajouter \n 2.Modifier "
-				+ "\n 3.Supprimer \n 4.Sélectionner");
-		
+				+ "\n 3.Supprimer \n 4.Sélectionner \n 5.Afficher la table");
 		Scanner sc = new Scanner(System.in);
-		
 		String choix = sc.nextLine();
+		
 		switch(choix) {
 		case "1": this.inserePeriode();
 			break;
@@ -46,12 +23,45 @@ public class Periodicite extends Connexion {
 			break;
 		case "4": this.selectPeriode();
 			break;
+		case "5": this.tablePeriode();
+			break;
 		default: System.out.println("Entrée inconnue");
 		
+		}	
+	}
+	
+	
+	
+	public void tablePeriode() {
+		
+		Connexion connection = new Connexion();
+		Connection laConnexion = connection.creeConnexion();
+		
+		try {
+			PreparedStatement requete = laConnexion.prepareStatement("select * from Periodicite");
+					ResultSet res = requete.executeQuery();
+	
+			while(res.next()) {
+
+				String id  = res.getString("id_periodicite");
+			    System.out.println("	id : " + id );
+			    
+			    String lib  = res.getString("libelle");
+			    System.out.println("	libelle : " + lib + "\n");
+				
+		    }
+
+		if (laConnexion != null) {
+			System.out.println("Fermeture de la connexion réussie! ");
+			laConnexion.close();
+		}	
+		} catch (SQLException sqle) {
+			System.out.println("Pas connecté" + sqle.getMessage());
 		}
 		
-		
 	}
+	
+	
 	
 	public void inserePeriode(){
 		
@@ -60,9 +70,7 @@ public class Periodicite extends Connexion {
 		Connection laConnexion = connection.creeConnexion();
 		
 		System.out.println("Quel type de periodicité souhaitez-vous ajouter ?");
-		
 		Scanner sc = new Scanner(System.in);
-		
 		String nom = sc.nextLine();
 		
 		try {
@@ -71,27 +79,22 @@ public class Periodicite extends Connexion {
 			
 			req.setString(1, nom);
 			
-
 			int i = req.executeUpdate();
 			System.out.println("ligne touché : " + i);
 			
 			if (laConnexion != null) {
 				System.out.println("Fermeture réussie! ");
 				laConnexion.close();
-			}
-
-		
-				
+			}	
 		} catch (SQLException sqle) {
 			System.out.println("Pas connecté" + sqle.getMessage());
-			
-		
 		}
 		
-		System.out.println("done");
-		
-		
-			} 
+		System.out.println("Souhaitez-vous insérer une nouvelle ligne ? : \n1 : oui \n2 : non");
+	    int refaire = sc.nextInt();
+	    if(refaire==1)
+	    	this.inserePeriode();
+	} 
 		
 		
 		
@@ -99,9 +102,7 @@ public class Periodicite extends Connexion {
 	public void suppPeriode(){
 		
 		System.out.println("Quel type de periodicité souhaitez-vous supprimer ?");
-		
 		Scanner sc = new Scanner(System.in);
-		
 		String nom = sc.nextLine();
 		
 		Connexion connection = new Connexion();
@@ -112,34 +113,30 @@ public class Periodicite extends Connexion {
 				
 			req.setString(1, nom); // 1 correspond au 1er para du where
 			
-
 			int i = req.executeUpdate();
 			System.out.println("ligne touché : " + i);
 			
-		if (laConnexion != null) {
-			System.out.println("Fermeture réussie! ");
-			laConnexion.close();
+			if (laConnexion != null) {
+				System.out.println("Fermeture réussie! ");
+				laConnexion.close();
+			}	
 			
-		}	
 		} catch (SQLException sqle) {
 			System.out.println("Pas connecté" + sqle.getMessage());
-			
-		
 		}
 		
-		System.out.println("done");
-		
-		
-		}
+		System.out.println("Souhaitez-vous supprimer une autre ligne ? : \n1 : oui \n2 : non");
+	    int refaire = sc.nextInt();
+	    if(refaire==1)
+	    	this.suppPeriode();
+	}
 	
 	
 	
 	public void selectPeriode() {
 		
 		System.out.println("Quel type de periodicité souhaitez-vous choisir ?");
-		
 		Scanner sc = new Scanner(System.in);
-		
 		String nom = sc.nextLine();
 		
 		Connexion connection = new Connexion();
@@ -150,38 +147,28 @@ public class Periodicite extends Connexion {
 					requete.setString(1, nom);
 					ResultSet res = requete.executeQuery();
 					
-			
-			
-					
 		    while(res.next()) {
 		    	 
-		    	 
-		    	
 		         int id  = res.getInt("id_periodicite");
 		         System.out.println("id : " + id );
-		         
 		         
 		         String lib  = res.getString("libelle");
 		         System.out.println("libelle : " + lib + "\n");
 		    }
 		    
-		    
-		    
-		    
-			
 		if (laConnexion != null) {
-			System.out.println("Fermeture de la co réussie! ");
+			System.out.println("Fermeture de la connexion réussie! ");
 			laConnexion.close();
-			
 		}	
 		} catch (SQLException sqle) {
 			System.out.println("Pas connecté" + sqle.getMessage());
-			
-		
 		}
 		
-		
-		
+		System.out.println("Souhaitez-vous selectionner une autre ligne ? : \n1 : oui \n2 : non");
+	    int refaire = sc.nextInt();
+	    if(refaire==1)
+	    	this.modifPeriode();
+
 	}
 	
 	
@@ -190,14 +177,10 @@ public class Periodicite extends Connexion {
 	public void modifPeriode(){
 			
 			System.out.println("Quel type de periodicité souhaitez-vous modifier ?");
-			
 			Scanner sc = new Scanner(System.in);
-			
 			String nom_av = sc.nextLine();
-			
-			
+
 			System.out.println("Avec quel mot souhaiter vous remplacer la périodicite '" + nom_av + "' ?");
-			
 			String nom_ap = sc.nextLine();
 			
 			Connexion connection = new Connexion();
@@ -219,13 +202,13 @@ public class Periodicite extends Connexion {
 			}	
 			} catch (SQLException sqle) {
 				System.out.println("Pas connecté" + sqle.getMessage());
-				
-			
 			}
 			
-			System.out.println("done");
+			System.out.println("Souhaitez-vous modifier une autre ligne ? : \n1 : oui \n2 : non");
+		    int refaire = sc.nextInt();
+		    if(refaire==1)
+		    	this.modifPeriode();
 			
-			
-			}
+	}
 	
 }

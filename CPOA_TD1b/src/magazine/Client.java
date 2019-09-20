@@ -13,7 +13,7 @@ public class Client {
 		
 		
 		System.out.println("Que souhaitez-vous faire sur la table Client: \n 1.Ajouter \n 2.Modifier "
-				+ "\n 3.Supprimer \n 4.Sélectionner");
+				+ "\n 3.Supprimer \n 4.Sélectionner \n 5.Afficher la table");
 		
 		Scanner sc = new Scanner(System.in);
 		
@@ -27,6 +27,8 @@ public class Client {
 			break;
 		case "4": this.selectClient();
 			break;
+		case "5": this.tableClient();
+		break;
 		default: System.out.println("Entrée inconnue");
 		
 		}
@@ -86,28 +88,28 @@ public class Client {
 			while(res.next()) {
 
 				String id  = res.getString("id_client");
-			    System.out.println("id : " + id );
+			    System.out.println("	id : " + id );
 			    
 			    String nom  = res.getString("nom");
-			    System.out.println("nom : " + nom );
+			    System.out.println("	nom : " + nom );
 			    
 			    String pre  = res.getString("prenom");
-			    System.out.println("prenom : " + pre );
+			    System.out.println("	prenom : " + pre );
 			    
 			    String nrue  = res.getString("no_rue");
-			    System.out.println("no_rue : " + nrue );
+			    System.out.println("	no_rue : " + nrue );
 			    
 			    String voie  = res.getString("voie");
-			    System.out.println("voie : " + voie );
+			    System.out.println("	voie : " + voie );
 			    
 			    String code_p  = res.getString("code_postal");
-			    System.out.println("code_postal : " + code_p);
+			    System.out.println("	code_postal : " + code_p);
 			    
 			    String ville  = res.getString("ville");
-			    System.out.println("ville : " + ville);
+			    System.out.println("	ville : " + ville);
 			    
 			    String pays  = res.getString("pays");
-			    System.out.println("pays : " + pays);
+			    System.out.println("	pays : " + pays + "\n");
 			    
 				
 		    }
@@ -183,10 +185,13 @@ public class Client {
 		
 		}
 		
-		System.out.println("done");
+		System.out.println("Souhaitez-vous inserer une autre ligne ? : \n1 : oui \n2 : non");
+	    int refaire = sc.nextInt();
+	    if(refaire==1)
+	    	this.insereClient();
 		
 		
-			} 
+	} 
 		
 		
 		
@@ -224,119 +229,110 @@ public class Client {
 		
 		}
 		
-		System.out.println("done");
+		System.out.println("Souhaitez-vous supprimer une autre ligne ? : \n1 : oui \n2 : non");
+	    int refaire = sc.nextInt();
+	    if(refaire==1)
+	    	this.suppClient();
 		
 		
 		}
 	
 	
 	
-	public void selectClient() {
+public void selectClient() {
 		
 		System.out.println("Voici le tableau des Clients :");
 		this.tableClient();
 		
-		System.out.println("Mettez le numéro pour le titre que vous voulez choisir ?");
-		
+		System.out.println("Mettez le numéro pour le client que vous voulez choisir ?");
 		Scanner sc = new Scanner(System.in);
-		
 		String titre = sc.nextLine();
 		
 		Connexion connection = new Connexion();
 		Connection laConnexion = connection.creeConnexion();
 		
 		try {
-			PreparedStatement requete = laConnexion.prepareStatement("select * from Client where titre=?");
+			PreparedStatement requete = laConnexion.prepareStatement("select * from Client where id_client=?");
 					requete.setString(1, titre);
 					ResultSet res = requete.executeQuery();
-					
-			
-					
+	
 		    while(res.next()) {
 		    	
-		    	String id  = res.getString("id_Client");
-			    System.out.println("id : " + id );
+		    	String id  = res.getString("id_client");
+			    System.out.println("	id : " + id );
 			    
-			    String tit  = res.getString("titre");
-			    System.out.println("titre : " + tit );
+			    String nom  = res.getString("nom");
+			    System.out.println("	nom : " + nom );
 			    
-			    String desc  = res.getString("description");
-			    System.out.println("description : " + desc );
+			    String prenom  = res.getString("prenom");
+			    System.out.println("	prenom : " + prenom );
 			    
-			    String tar  = res.getString("tarif_numero");
-			    System.out.println("tarif : " + tar );
+			    String nr  = res.getString("no_rue");
+			    System.out.println("	no_rue : " + nr );
 			    
-			    String visu  = res.getString("visuel");
-			    System.out.println("visuel : " + visu );
+			    String voie  = res.getString("voie");
+			    System.out.println("	voie : " + voie );
 			    
-			    String id_p  = res.getString("id_periodicite");
-			    System.out.println("id_periodicite : " + id_p + "\n");
+			    String id_p  = res.getString("code_postal");
+			    System.out.println("	code_postal : " + id_p );
+			    
+			    String ville  = res.getString("ville");
+			    System.out.println("	ville : " + ville );
+			    
+			    String pays  = res.getString("pays");
+			    System.out.println("	pays : " + pays + "\n");
 		    }
-		    
-		    
-		    
-		    
 			
-		if (laConnexion != null) {
-			System.out.println("Fermeture de la co réussie! ");
-			laConnexion.close();
-			
-		}	
+			if (laConnexion != null) {
+				System.out.println("Fermeture de la connexion réussie! ");
+				laConnexion.close();
+			}	
 		} catch (SQLException sqle) {
 			System.out.println("Pas connecté" + sqle.getMessage());
-			
-		
 		}
-		
-		
 	}
 	
 	
 	
 	
 	public void modifClient(){
+		
+		this.tableClient();
+		
+		System.out.println("Quelle donnée souhaitez-vous modifier parmi (recopier exactement le terme) : \nnom \nprenom \nno_rue \nvoie \ncode_postal \nville \npays \ncode_postal");
+		Scanner sc = new Scanner(System.in);
+		String col = sc.nextLine();
+		
+		System.out.println("Entrez l'id da votre ligne :");
+		String num = sc.nextLine();
+		
+		System.out.println("Par quel mot ? : ");
+		String val_ap = sc.nextLine();
+		
+		Connexion connection = new Connexion();
+		Connection laConnexion = connection.creeConnexion();
+		
+		try {
+			PreparedStatement req = laConnexion.prepareStatement("update Client set " + col + "=? where id_client=?");
+			req.setString(1, val_ap); // 1 correspond au 1er para du where
+			req.setString(2, num);
+
+			int i = req.executeUpdate();
+			System.out.println("ligne touché : " + i);
 			
-			System.out.println("Quel donnée de Client souhaitez-vous modifier ? \n Entrer son titre puis sa description");
-			
-			Scanner sc = new Scanner(System.in);
-			
-			String titre = sc.nextLine();
-			String desc = sc.nextLine();
-			
-			
-			System.out.println("Avec quel mot souhaiter vous remplacer le titre :'" + titre + "' et la description : '" + desc + "' ?");
-			
-			String titre_ap = sc.nextLine();
-			String desc_ap = sc.nextLine();
-			
-			Connexion connection = new Connexion();
-			Connection laConnexion = connection.creeConnexion();
-			
-			try {
-				PreparedStatement req = laConnexion.prepareStatement("update Client set titre=?, description=? where titre=? and description=?");
-					
-				req.setString(1, titre_ap); // 1 correspond au 1er para du where
-				req.setString(2, desc_ap);
-				req.setString(3, titre);
-				req.setString(4, desc);
-	
-				int i = req.executeUpdate();
-				System.out.println("ligne touché : " + i);
-				
-			if (laConnexion != null) {
-				System.out.println("Fermeture réussie! ");
-				laConnexion.close();
-				
-			}	
-			} catch (SQLException sqle) {
-				System.out.println("Pas connecté" + sqle.getMessage());
-				
-			
-			}
-			
-			System.out.println("done");
-			
-			
-	
+		if (laConnexion != null) {
+			System.out.println("Fermeture réussie! ");
+			laConnexion.close();
+		}	
+		
+		} catch (SQLException sqle) {
+			System.out.println("Pas connecté" + sqle.getMessage());
+		}
+		
+		System.out.println("Souhaitez-vous modifier une autre ligne ? : \n1 : oui \n2 : non");
+	    int refaire = sc.nextInt();
+	    if(refaire==1)
+	    	this.modifClient();
+
 }
 }

@@ -10,34 +10,15 @@ import magazine.Revue;
 
 public class Revue {
 
-	//doit contenir les fonctions : insérer, supprimer, selectionner
-	
-		private String titre;
-		private String description;
-		private String visuel;
-		private int id_Revue;
-		private float tarif_num;
-		private int sauv;
-		
-		
-		public Revue(String titre, String description, float tarif_num, String visuel, int id_Revue) {
-			this.titre = titre;
-			this.description = description;
-			this.tarif_num = tarif_num;
-			this.visuel = visuel;
-			this.id_Revue = id_Revue;
-			
-		}
-		
+
 		public void choixRevue() {
 			
 			
-			System.out.println("Que souhaitez-vous faire sur la table Revue: \n 1.Ajouter \n 2.Modifier "
-					+ "\n 3.Supprimer \n 4.Sélectionner");
-			
+			System.out.println("Que souhaitez-vous faire sur la table Periodicité: \n 1.Ajouter \n 2.Modifier "
+					+ "\n 3.Supprimer \n 4.Sélectionner \n 5.Afficher la table");
 			Scanner sc = new Scanner(System.in);
-			
 			String choix = sc.nextLine();
+			
 			switch(choix) {
 			case "1": this.insereRevue();
 				break;
@@ -47,9 +28,11 @@ public class Revue {
 				break;
 			case "4": this.selectRevue();
 				break;
+			case "5": this.tableRevue();
+				break;
 			default: System.out.println("Entrée inconnue");
 			
-			}
+			}	
 			
 			
 		}
@@ -64,29 +47,21 @@ public class Revue {
 				PreparedStatement requete = laConnexion.prepareStatement("select id_periodicite from Periodicite where libelle=?");
 						requete.setString(1, a);
 						ResultSet res = requete.executeQuery();
-						
-				
-		
+
 				while(res.next()) {
 	
 				    int id  = res.getInt("id_periodicite");
 				    sauv = id;
 				    System.out.println("id : " + id );
-					
 			    }
 
-						
-
-				
 			if (laConnexion != null) {
-				System.out.println("Fermeture de la co réussie! ");
+				System.out.println("Fermeture de la connexion réussie! ");
 				laConnexion.close();
 				
 			}	
 			} catch (SQLException sqle) {
 				System.out.println("Pas connecté" + sqle.getMessage());
-				
-			
 			}
 			
 			return sauv;
@@ -100,43 +75,35 @@ public class Revue {
 			try {
 				PreparedStatement requete = laConnexion.prepareStatement("select * from Revue");
 						ResultSet res = requete.executeQuery();
-						
-				
 		
 				while(res.next()) {
 	
 					String id  = res.getString("id_revue");
-				    System.out.println("id : " + id );
+				    System.out.println("	id : " + id );
 				    
 				    String titre  = res.getString("titre");
-				    System.out.println("titre : " + titre );
+				    System.out.println("	titre : " + titre );
 				    
 				    String desc  = res.getString("description");
-				    System.out.println("description : " + desc );
+				    System.out.println("	description : " + desc );
 				    
 				    String tar  = res.getString("tarif_numero");
-				    System.out.println("tarif : " + tar );
+				    System.out.println("	tarif : " + tar );
 				    
 				    String visu  = res.getString("visuel");
-				    System.out.println("visuel : " + visu );
+				    System.out.println("	visuel : " + visu );
 				    
 				    String id_p  = res.getString("id_periodicite");
-				    System.out.println("id_periodicite : " + visu + "\n");
+				    System.out.println("	id_periodicite : " + visu + "\n");
 					
 			    }
 
-						
-
-				
 			if (laConnexion != null) {
-				System.out.println("Fermeture de la co réussie! ");
+				System.out.println("Fermeture de la connexion réussie! ");
 				laConnexion.close();
-				
 			}	
 			} catch (SQLException sqle) {
 				System.out.println("Pas connecté" + sqle.getMessage());
-				
-			
 			}
 			
 		}
@@ -152,9 +119,7 @@ public class Revue {
 			Connection laConnexion = connection.creeConnexion();
 			
 			System.out.println("Entrez une information par ligne ces informations suivantes : titre, description, tarif du nemoro, visuel, son type periodicite commencant par une maj :");
-			
 			Scanner sc = new Scanner(System.in);
-			
 			String titre = sc.nextLine();
 			String desc = sc.nextLine();
 			String tar = sc.nextLine();
@@ -184,19 +149,16 @@ public class Revue {
 					System.out.println("Fermeture réussie! ");
 					laConnexion.close();
 				}
-
-			
-					
+				
 			} catch (SQLException sqle) {
 				System.out.println("Pas connecté" + sqle.getMessage());
-				
-			
 			}
 			
-			System.out.println("done");
-			
-			
-				} 
+			System.out.println("Souhaitez-vous insérer une nouvelle ligne ? : \n1 : oui \n2 : non");
+		    int refaire = sc.nextInt();
+		    if(refaire==1)
+		    	this.insereRevue();
+		} 
 			
 			
 			
@@ -206,18 +168,14 @@ public class Revue {
 			this.tableRevue();
 			
 			System.out.println("Mettez le numéro de la revue que vous souhaitez supprimer?");
-			
 			Scanner sc = new Scanner(System.in);
-			
 			String id = sc.nextLine();
-			
 			
 			Connexion connection = new Connexion();
 			Connection laConnexion = connection.creeConnexion();
 			
 			try {
 				PreparedStatement req = laConnexion.prepareStatement("delete from Revue where id_revue=?");
-					
 				req.setString(1, id); // 1 correspond au 1er para du where
 
 				int i = req.executeUpdate();
@@ -226,18 +184,17 @@ public class Revue {
 			if (laConnexion != null) {
 				System.out.println("Fermeture réussie! ");
 				laConnexion.close();
-				
 			}	
+			
 			} catch (SQLException sqle) {
 				System.out.println("Pas connecté" + sqle.getMessage());
-				
-			
 			}
 			
-			System.out.println("done");
-			
-			
-			}
+			System.out.println("Souhaitez-vous supprimer une autre ligne ? : \n1 : oui \n2 : non");
+		    int refaire = sc.nextInt();
+		    if(refaire==1)
+		    	this.suppRevue();
+		}
 		
 		
 		
@@ -250,37 +207,35 @@ public class Revue {
 			
 			Scanner sc = new Scanner(System.in);
 			
-			String titre = sc.nextLine();
+			String idRev = sc.nextLine();
 			
 			Connexion connection = new Connexion();
 			Connection laConnexion = connection.creeConnexion();
 			
 			try {
-				PreparedStatement requete = laConnexion.prepareStatement("select * from Revue where titre=?");
-						requete.setString(1, titre);
+				PreparedStatement requete = laConnexion.prepareStatement("select * from Revue where id_revue=?");
+						requete.setString(1, idRev);
 						ResultSet res = requete.executeQuery();
-						
-				
-						
+
 			    while(res.next()) {
 			    	
 			    	String id  = res.getString("id_revue");
-				    System.out.println("id : " + id );
+				    System.out.println("	id : " + id );
 				    
 				    String tit  = res.getString("titre");
-				    System.out.println("titre : " + tit );
+				    System.out.println("	titre : " + tit );
 				    
 				    String desc  = res.getString("description");
-				    System.out.println("description : " + desc );
+				    System.out.println("	description : " + desc );
 				    
-				    String tar  = res.getString("tarif_numero");
-				    System.out.println("tarif : " + tar );
+				    double tar  = res.getDouble("tarif_numero");
+				    System.out.println("	tarif : " + tar );
 				    
 				    String visu  = res.getString("visuel");
-				    System.out.println("visuel : " + visu );
+				    System.out.println("	visuel : " + visu );
 				    
-				    String id_p  = res.getString("id_periodicite");
-				    System.out.println("id_periodicite : " + id_p + "\n");
+				    int id_p  = res.getInt("id_periodicite");
+				    System.out.println("	id_periodicite : " + id_p + "\n");
 			    }
 			    
 			    
@@ -288,7 +243,7 @@ public class Revue {
 			    
 				
 			if (laConnexion != null) {
-				System.out.println("Fermeture de la co réussie! ");
+				System.out.println("Fermeture de la connexion réussie! ");
 				laConnexion.close();
 				
 			}	
@@ -305,48 +260,44 @@ public class Revue {
 		
 		
 		public void modifRevue(){
+			
+			this.tableRevue();
+			
+			System.out.println("Quelle donnée souhaitez-vous modifier parmi (recopier exactement le terme) : \ntitre \ndescription \ntarif_numero \nvisuel");
+			Scanner sc = new Scanner(System.in);
+			String col = sc.nextLine();
+			
+			System.out.println("Entrez l'id de votre ligne :");
+			String num = sc.nextLine();
+			
+			System.out.println("Par quel mot ou valeur ? : ");
+			String val_ap = sc.nextLine();
+			
+			Connexion connection = new Connexion();
+			Connection laConnexion = connection.creeConnexion();
+			
+			try {
+				PreparedStatement req = laConnexion.prepareStatement("update Revue set " + col + "=? where id_revue=?");
+				req.setString(1, val_ap); // 1 correspond au 1er para du where
+				req.setString(2, num);
+	
+				int i = req.executeUpdate();
+				System.out.println("ligne touché : " + i);
 				
-				System.out.println("Quel donnée de Revue souhaitez-vous modifier ? \n Entrer son titre puis sa description");
-				
-				Scanner sc = new Scanner(System.in);
-				
-				String titre = sc.nextLine();
-				String desc = sc.nextLine();
-				
-				
-				System.out.println("Avec quel mot souhaiter vous remplacer le titre :'" + titre + "' et la description : '" + desc + "' ?");
-				
-				String titre_ap = sc.nextLine();
-				String desc_ap = sc.nextLine();
-				
-				Connexion connection = new Connexion();
-				Connection laConnexion = connection.creeConnexion();
-				
-				try {
-					PreparedStatement req = laConnexion.prepareStatement("update Revue set titre=?, description=? where titre=? and description=?");
-						
-					req.setString(1, titre_ap); // 1 correspond au 1er para du where
-					req.setString(2, desc_ap);
-					req.setString(3, titre);
-					req.setString(4, desc);
-		
-					int i = req.executeUpdate();
-					System.out.println("ligne touché : " + i);
-					
-				if (laConnexion != null) {
-					System.out.println("Fermeture réussie! ");
-					laConnexion.close();
-					
-				}	
-				} catch (SQLException sqle) {
-					System.out.println("Pas connecté" + sqle.getMessage());
-					
-				
-				}
-				
-				System.out.println("done");
-				
-				
-				}
+			if (laConnexion != null) {
+				System.out.println("Fermeture réussie! ");
+				laConnexion.close();
+			}	
+			
+			} catch (SQLException sqle) {
+				System.out.println("Pas connecté" + sqle.getMessage());
+			}
+			
+			System.out.println("Souhaitez-vous modifier une autre ligne ? : \n1 : oui \n2 : non");
+		    int refaire = sc.nextInt();
+		    if(refaire==1)
+		    	this.modifRevue();
+
+	}
 	
 }
